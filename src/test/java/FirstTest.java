@@ -82,4 +82,21 @@ public class FirstTest {
         assertThat(out)
                 .contains("1번 명언이 등록되었습니다.");
     }
+
+    @Test
+    @DisplayName("등록 - 명언 2개 입력, 명언 번호가 증가")
+    void t8() {
+        String out = TestBot.run("""
+                등록
+                현재를 사랑하라.
+                작자 미상
+                등록
+                현재를 사랑하라.
+                작자 미상
+                """); //선입력
+
+        assertThat(out)
+                .contains("1번 명언이 등록되었습니다.")
+                .contains("2번 명언이 등록되었습니다.");
+    }
 }
