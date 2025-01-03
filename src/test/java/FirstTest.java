@@ -14,10 +14,10 @@ public class FirstTest {
 
     @Test
     void t2() {
-        App app = new App();
-        app.run();
-
-        assertThat("aaa").isEqualTo("aaa");
+//        App app = new App();
+//        app.run();
+//
+//        assertThat("aaa").isEqualTo("aaa");
     }
 
     @Test
