@@ -27,13 +27,8 @@ public class FirstTest {
     @Test
     void t3() {
         // 테스트봇 선입력
-        Scanner sc = new Scanner("종료");
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
-
-        TestApp app = new TestApp();
-        app.run();
+        String out = TestBot.run("종료");
 
         assertThat(out.toString()).contains("명언앱을 종료합니다.");
         // 출력값 체크
@@ -43,16 +38,14 @@ public class FirstTest {
     @DisplayName("앱 시작시 '== 명언 앱 ==' 출력")
     void t4() {
         // 테스트봇 선입력
-        Scanner sc = new Scanner("종료");
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
-
-        TestApp app = new TestApp();
-        app.run();
-
-
-
+//        Scanner sc = new Scanner("종료");
+//
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        System.setOut(new PrintStream(out));
+//
+//        TestApp app = new TestApp();
+//        app.run();
+        String out = TestBot.run("종료");
 
         assertThat(out.toString())
                 .containsSubsequence("== 명언 앱 ==", "명언앱을 종료합니다.");
