@@ -41,6 +41,7 @@ public class FileTest {
     @Test
     @DisplayName("파일 내용 수정")
     void t4() {
+
         String file = "test2.txt";
         String writeContent = "modify content";
 
@@ -49,5 +50,23 @@ public class FileTest {
         String readContent = Util.File.readAsString(file);
         assertThat(readContent)
                 .isEqualTo(writeContent);
+    }
+
+    @Test
+    @DisplayName("파일 삭제")
+    void t5() {
+
+        String file = "test3.txt";
+
+        //test3.txt 파일 생성
+        Util.File.createFile(file);
+        assertThat(Files.exists(Paths.get(file)))
+                .isTrue();
+
+        Util.File.delete(file);
+
+        //존재 여부 확인
+        assertThat(Files.exists(Paths.get(file)))
+                .isFalse();
     }
 }
