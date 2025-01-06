@@ -184,8 +184,8 @@ public class WiseSayingControllerTest {
                 목록
                 """);
         assertThat(out)
-                .doesNotContain("1 / 현재를 사랑하라. / 작자미상")
-                .contains("1 / 새 명언 내용 / 새 작가");
+                .doesNotContain("1 / 작자미상 / 현재를 사랑하라.")
+                .contains("1 / 새 작가 / 새 명언 내용");
     }
 
 }

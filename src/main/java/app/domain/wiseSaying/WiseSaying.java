@@ -33,4 +33,8 @@ public class WiseSaying {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    public boolean isNew() {
+        return this.id == 0;
+    }
 }
