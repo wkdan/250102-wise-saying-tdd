@@ -92,4 +92,16 @@ public class FileTest {
         assertThat(Files.isDirectory(Path.of(dirPath)))
                 .isTrue();
     }
+
+    @Test
+    @DisplayName("폴더 삭제")
+    void t7() {
+
+        String dirPath = "test";
+
+        Util.File.delete(dirPath);
+
+        assertThat(Files.exists(Paths.get(dirPath)))
+                .isFalse();
+    }
 }
