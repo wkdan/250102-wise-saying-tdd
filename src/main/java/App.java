@@ -33,6 +33,7 @@ public class App {
                 default -> System.out.println("올바른 명령이 아닙니다.");
             }
             if(cmd.equals("종료")) break;
+
         }
     }
 }
