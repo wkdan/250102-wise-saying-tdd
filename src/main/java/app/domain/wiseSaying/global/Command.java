@@ -43,5 +43,15 @@ public class Command {
     public String getParam(String key) {
         return paramMap.get(key);
     }
+
+    public int getParamAsInt(String key) {
+
+        try {
+            String param = paramMap.get(key);
+            return Integer.parseInt(param);
+        } catch(NumberFormatException e) {
+            return 0;
+        }
+    }
     // 쪼개기 작업
 }
