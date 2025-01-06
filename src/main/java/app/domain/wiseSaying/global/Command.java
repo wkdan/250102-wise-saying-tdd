@@ -1,39 +1,47 @@
 package app.domain.wiseSaying.global;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Command {
 
     String actionName;
-    String paramKey;
-    String paramValue;
+
+    Map<String, String> paramMap;
 
     public Command(String cmd) {
+
+        paramMap = new HashMap<>();
+
         String[] cmdBits = cmd.split("\\?");
         actionName = cmdBits[0];
 
         if(cmdBits.length < 2) {
-            paramValue = "";
             return;
         }
 
-        String param = cmdBits[1];
+        String queryString = cmdBits[1];
+        String[] params = queryString.split("&");
 
-        String[] paramBits = param.split("=", 2);
-        paramKey = paramBits[0];
-        if(paramBits.length < 2) {
-            paramValue = null;
-            return;
+        for(String param : params) {
+            String[] paramBits = param.split("=", 2);
+
+            if(paramBits.length < 2) {
+                continue;
+            }
+
+            paramMap.put(paramBits[0], paramBits[1]);
         }
 
-        paramValue = paramBits[1];
+
     }
 
     public String getActionName() {
         return actionName;
     }
 
-    public String getParam() {
-
-        return paramValue;
+    public String getParam(String key) {
+        return paramMap.get(key);
     }
     // 쪼개기 작업
 }
