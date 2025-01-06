@@ -1,10 +1,5 @@
 import domain.wiseSaying.SystemController;
-import domain.wiseSaying.WiseSaying;
 import domain.wiseSaying.WiseSayingController;
-
-import java.lang.reflect.WildcardType;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -24,15 +19,20 @@ public class App {
         while (true) {
             System.out.println("명령 ) ");
             String cmd = sc.nextLine();
-            if(cmd.equals("종료")){
-                systemController.exit();
-                break;
-            } else if(cmd.equals("등록")) {
-                wiseSayingController.actionWrite();
-            } else if(cmd.equals("목록")) {
-                wiseSayingController.actionPrint();
-            }
 
+            // 명령?부가정보 => 명령, 부가정보
+
+            String[] cmdBits = cmd.split("\\?");
+            String actionName = cmdBits[0];
+
+            switch (actionName) {
+                case "종료" -> systemController.exit();
+                case "등록" -> wiseSayingController.actionWrite();
+                case "목록" -> wiseSayingController.actionPrint();
+                case "삭제" -> wiseSayingController.actionDelete(cmd);
+                default -> System.out.println("올바른 명령이 아닙니다.");
+            }
+            if(cmd.equals("종료")) break;
         }
     }
 }
