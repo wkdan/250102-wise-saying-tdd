@@ -36,9 +36,10 @@ public class FileTest {
     void t3() {
 
         //파일을 Hello, World!로 생성
+        String file = "test/test.txt";
         String testContent = "Hello World!";
         Util.File.write(file, testContent);
-        String file = "test/test.txt";
+
         String content = Util.File.readAsString(file); // 파일 생성 ok
 
         assertThat(content)
@@ -84,8 +85,6 @@ public class FileTest {
         String dirPath = "test";
 
         Util.File.createDir(dirPath);
-
-        Files.exists(Paths.get(dirPath));
 
         assertThat(Files.exists(Paths.get(dirPath)))
                 .isTrue();
