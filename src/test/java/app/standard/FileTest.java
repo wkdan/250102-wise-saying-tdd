@@ -21,8 +21,7 @@ public class FileTest {
     void t2() {
         String file = "test.txt";
 
-
-        Util.File.createFile(); // 파일 생성 ok
+        Util.File.createFile(file); // 파일 생성 ok
 
         assertThat(Files.exists(Paths.get(file)))
                 .isTrue();
