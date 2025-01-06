@@ -17,8 +17,13 @@ public class Command {
 
         String param = cmdBits[1];
 
-        String[] paramBits = param.split("=");
+        String[] paramBits = param.split("=", 2);
         paramKey = paramBits[0];
+        if(paramBits.length < 2) {
+            paramValue = null;
+            return;
+        }
+
         paramValue = paramBits[1];
     }
 
@@ -26,9 +31,9 @@ public class Command {
         return actionName;
     }
 
-    public int getParam() {
+    public String getParam() {
 
-        return Integer.parseInt(paramValue);
+        return paramValue;
     }
     // 쪼개기 작업
 }
