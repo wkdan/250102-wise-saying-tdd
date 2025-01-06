@@ -34,4 +34,20 @@ public class CommandTest {
         assertThat(actionName).isEqualTo("삭제");
     }
 
+    @Test
+    @DisplayName("불완전한 입력이 들어왔을 때, 삭제?1, 삭제?id?1")
+    void t4() {
+        Command cmd = new Command("삭제");
+        String actionName = cmd.getActionName();
+
+        assertThat(actionName).isEqualTo("삭제");
+    }
+
+    @Test
+    @DisplayName("입력값 - 삭제?id=1 일 때, 파라미터를 요청하면 1이 나와야 한다.")
+    void t5() {
+        Command cmd = new Command("삭제?id=1");
+        int id = cmd.getParam();
+        assertThat(id).isEqualTo(1);
+    }
 }
