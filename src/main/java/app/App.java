@@ -1,5 +1,7 @@
-import domain.wiseSaying.SystemController;
-import domain.wiseSaying.WiseSayingController;
+package app;
+
+import app.domain.wiseSaying.SystemController;
+import app.domain.wiseSaying.WiseSayingController;
 import java.util.Scanner;
 
 public class App {
@@ -30,6 +32,7 @@ public class App {
                 case "등록" -> wiseSayingController.actionWrite();
                 case "목록" -> wiseSayingController.actionPrint();
                 case "삭제" -> wiseSayingController.actionDelete(cmd);
+//                case "수정" -> wiseSayingController.actionModify(cmd);
                 default -> System.out.println("올바른 명령이 아닙니다.");
             }
             if(cmd.equals("종료")) break;
