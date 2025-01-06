@@ -10,8 +10,7 @@ public class Command {
     }
 
     public String getActionName() {
-
-        return "삭제";
+        return actionName;
     }
     // 쪼개기 작업
 }
