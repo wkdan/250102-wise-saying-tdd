@@ -14,10 +14,10 @@ public class Util {
         }
 
         public static void createFile(String pathValue) {
-            Path filePath = Paths.get(pathValue);
+            write(pathValue, "");
 
             try {
-                Files.createFile(filePath);
+                Files.createFile();
             } catch (Exception e) {
                 System.out.println("파일 생성 중 실패");
                 e.printStackTrace();
@@ -58,6 +58,9 @@ public class Util {
                 System.out.println("파일 삭제 실패");
                 e.printStackTrace();
             }
+        }
+
+        public static void createDir(String dirPath) {
         }
     }
 }
