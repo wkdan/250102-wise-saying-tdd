@@ -42,4 +42,5 @@ bin/
 .DS_Store
 
 ### test ###
-test/
+test
+db
