@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -45,12 +46,11 @@ public class WiseSayingFileRepositoryTest {
     @Test
     @DisplayName("명언 삭제")
     void t2() {
-        WiseSaying wiseSaying = new WiseSaying(1,"aaa","bbb");
+
+        WiseSaying wiseSaying = new WiseSaying(1,"aaa", "bbb");
 
         wiseSayingRepository.save(wiseSaying);
         String filePath = "db/test/wiseSaying/1.json";
-
-        wiseSayingRepository.deleteById(1);
 
         boolean delRst = wiseSayingRepository.deleteById(1);
 
@@ -65,15 +65,32 @@ public class WiseSayingFileRepositoryTest {
         WiseSaying wiseSaying = new WiseSaying(1,"aaa","bbb");
 
         wiseSayingRepository.save(wiseSaying);
-        String filePath = "db/test/wiseSaying/1.json";
 
         wiseSayingRepository.deleteById(1);
+        assertThat(Files.exists(Path.of("db/test/wiseSaying/1.json"))).isTrue();
 
         Optional<WiseSaying> opWiseSaying = wiseSayingRepository.findById(1);
-
         WiseSaying foundWiseSaying = opWiseSaying.orElse(null);
 
         assertThat(foundWiseSaying).isNotNull();
         assertThat(foundWiseSaying).isEqualTo(wiseSaying);
+    }
+
+    @Test
+    @DisplayName("모든 명언 가져오기")
+    void t4() {
+        WiseSaying wiseSaying1 = new WiseSaying(1,"aaa1","bbb1");
+        WiseSaying wiseSaying2 = new WiseSaying(1,"aaa2","bbb2");
+        WiseSaying wiseSaying3 = new WiseSaying(1,"aaa3","bbb3");
+
+        wiseSayingRepository.save(wiseSaying1);
+        wiseSayingRepository.save(wiseSaying2);
+        wiseSayingRepository.save(wiseSaying3);
+
+        List<WiseSaying> wiseSayings = wiseSayingRepository.findAll();
+
+        assertThat(wiseSayings).hasSize(3);
+        assertThat(wiseSayings).contains(wiseSaying1, wiseSaying2, wiseSaying3);
+
     }
 }

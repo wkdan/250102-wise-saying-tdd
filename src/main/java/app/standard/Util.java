@@ -134,6 +134,9 @@ public class Util {
 
         public static Map<String, Object> readAsMap(String filePath) {
             String jsonStr = File.readAsString(filePath);
+            if(jsonStr.isEmpty()){
+                return new LinkedHashMap<>();
+            }
             return jsonToMap(jsonStr);
         }
 

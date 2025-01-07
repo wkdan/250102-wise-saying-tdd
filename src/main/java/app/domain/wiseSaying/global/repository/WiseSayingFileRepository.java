@@ -5,6 +5,7 @@ import app.standard.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class WiseSayingFileRepository implements WiseSayingRepository{
@@ -22,7 +23,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository{
     public WiseSaying save(WiseSaying wiseSaying) {
 
 
-        Util.Json.writeAsMap(getFilePath(id),wiseSaying.toMap());
+        Util.Json.writeAsMap(getFilePath(wiseSaying.getId()),wiseSaying.toMap());
         return wiseSaying;
     }
 
@@ -35,13 +36,15 @@ public class WiseSayingFileRepository implements WiseSayingRepository{
     }
 
     public Optional<WiseSaying> findById(int id) {
-        Optional<WiseSaying> opWiseSaying = wiseSayingList.stream()
-                .filter(w -> w.getId() == id)
-                .findFirst();
+        String path = getFilePath(id);
+        Map<String, Object> map = Util.Json.readAsMap(path);
 
-        return opWiseSaying;
-
+        if (map.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(WiseSaying.fromMap(map));
     }
+
     private String getFilePath(int id){
         return DB_PATH + id + ".json";
     }
