@@ -49,17 +49,19 @@ public class Util {
             }
         }
 
-        public static void delete(String file) {
+        public static boolean delete(String file) {
 
             Path filePath = Paths.get(file);
 
-            if (!Files.exists(filePath)) return;
+            if (!Files.exists(filePath)) return false;
 
             try {
                 Files.delete(filePath);
+                return true;
             } catch (IOException e) {
                 System.out.println("파일 삭제 실패");
                 e.printStackTrace();
+                return false;
             }
         }
 
@@ -144,9 +146,9 @@ public class Util {
                     .replaceAll("\n", "")
                     .replaceAll(" : ", ":");
 
-            Arrays.stream(jsonStr.split(",")) // ["id" : 1, "content" : "aaa", "author" : "bbb"]
-                    .map(p -> p.trim().split(":")) //  p => [""id" : 1"]
-                    .forEach(p -> { // p => ["id", 1]
+            Arrays.stream(jsonStr.split(","))
+                    .map(p -> p.trim().split(":"))
+                    .forEach(p -> {
                         String key = p[0].replaceAll("\"", "");
                         String value = p[1];
 

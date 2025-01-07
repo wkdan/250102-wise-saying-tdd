@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public class WiseSayingFileRepository implements WiseSayingRepository{
 
+    private static final String DB_PATH = "db/test/wiseSaying/";
+
     private final List<WiseSaying> wiseSayingList;
     private int lastId;
 
@@ -20,7 +22,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository{
     public WiseSaying save(WiseSaying wiseSaying) {
 
 
-        Util.Json.writeAsMap("db/wiseSaying/%d.json".formatted(wiseSaying.getId()),wiseSaying.toMap());
+        Util.Json.writeAsMap(getFilePath(id),wiseSaying.toMap());
         return wiseSaying;
     }
 
@@ -29,7 +31,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository{
     }
 
     public boolean deleteById(int id) {
-        return wiseSayingList.removeIf(w -> w.getId() == id); // 삭제 성공 true, 실패 false
+        return Util.File.delete(getFilePath(id));
     }
 
     public Optional<WiseSaying> findById(int id) {
@@ -38,5 +40,9 @@ public class WiseSayingFileRepository implements WiseSayingRepository{
                 .findFirst();
 
         return opWiseSaying;
+
+    }
+    private String getFilePath(int id){
+        return DB_PATH + id + ".json";
     }
 }
