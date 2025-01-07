@@ -132,18 +132,10 @@ public class Util {
 
         public static Map<String, Object> readAsMap(String filePath) {
             String jsonStr = File.readAsString(filePath);
-            return null;
+            return jsonToMap(jsonStr);
         }
 
         public static Map<String, Object> jsonToMap(String jsonStr) {
-
-//            String jsonStr = """
-//
-//                    "id" : 1,
-//                    "content" : "aaa",
-//                    "author" : "bbb"
-//
-//                """;
 
             Map<String, Object> resultMap = new LinkedHashMap<>();
 
