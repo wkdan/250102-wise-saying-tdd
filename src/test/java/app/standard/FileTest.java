@@ -4,8 +4,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,22 +12,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileTest {
 
-    // 테스트 시작 전에 test 폴더 생성
+    // 3. 테스트 시작 전에 test 폴더 생성
     // 테스트 전처리
 
     @BeforeAll
-    static void beforeAll(){
+    static void beforeAll() {
         System.out.println("테스트 실행 전에 한번 실행");
         Util.File.createDir("test");
     }
 
-    // 테스트 종료 후에 test 폴더 삭제
-    // 테스트 후처리
     @AfterAll
-    static void afterAll(){
+    static void afterAll() {
         System.out.println("테스트 실행 후에 한번 실행");
-        Util.File.delete("test");
+        Util.File.deleteForce("test");
     }
+
+    // 4. 테스트 종료 후에 test 폴더 삭제
+    // 테스트 후처리
 
     @Test
     @DisplayName("최초의 파일 테스트")
@@ -40,6 +39,7 @@ public class FileTest {
     @Test
     @DisplayName("파일 생성. 내용이 없는 빈 파일 생성")
     void t2() {
+
         String file = "test/test.txt";
 
         Util.File.createFile(file); // 파일 생성 ok
@@ -47,16 +47,17 @@ public class FileTest {
         assertThat(Files.exists(Paths.get(file)))
                 .isTrue();
     }
+
     @Test
     @DisplayName("파일 내용 읽어오기")
     void t3() {
 
-        //파일을 Hello, World!로 생성
+        // 파일을 Hello, World 내용으로 생성
         String file = "test/test.txt";
-        String testContent = "Hello World!";
-        Util.File.write(file, testContent);
+        String testContent = "Hello, World";
 
-        String content = Util.File.readAsString(file); // 파일 생성 ok
+        Util.File.write(file, testContent);
+        String content = Util.File.readAsString(file);
 
         assertThat(content)
                 .isEqualTo(testContent);
@@ -70,8 +71,8 @@ public class FileTest {
         String writeContent = "modify content";
 
         Util.File.write(file, writeContent);
-
         String readContent = Util.File.readAsString(file);
+
         assertThat(readContent)
                 .isEqualTo(writeContent);
     }
@@ -82,16 +83,18 @@ public class FileTest {
 
         String file = "test/test.txt";
 
-        //test3.txt 파일 생성
+        // test3.txt 파일 생성
         Util.File.createFile(file);
         assertThat(Files.exists(Paths.get(file)))
                 .isTrue();
 
+        // test3.txt 파일 삭제
         Util.File.delete(file);
 
-        //존재 여부 확인
+        // test3.txt 존재 여부 확인
         assertThat(Files.exists(Paths.get(file)))
                 .isFalse();
+
     }
 
     @Test
@@ -107,6 +110,7 @@ public class FileTest {
 
         assertThat(Files.isDirectory(Path.of(dirPath)))
                 .isTrue();
+
     }
 
     @Test
@@ -118,6 +122,30 @@ public class FileTest {
         Util.File.delete(dirPath);
 
         assertThat(Files.exists(Paths.get(dirPath)))
+                .isFalse();
+    }
+
+    @Test
+    @DisplayName("파일 생성 -> 없는 폴더에 생성 시도하면 폴더를 생성한 후에 파일 생성")
+    void t8() {
+        String path = "test/test2/test.txt";
+
+        Util.File.createFile(path);
+
+        boolean rst = Files.exists(Paths.get(path));
+        assertThat(rst)
+                .isTrue();
+    }
+
+    @Test
+    @DisplayName("파일 삭제 -> 폴더가 비어있지 않을 때 안의 내용까지 같이 삭제")
+    void t9() {
+        String path = "test/test2/test.txt";
+
+        Util.File.deleteForce(path); // 강제 삭제
+
+        boolean rst = Files.exists(Paths.get(path));
+        assertThat(rst)
                 .isFalse();
     }
 }
