@@ -20,7 +20,7 @@ public class WiseSayingService {
         return wiseSayingRepository.save(wiseSaying);
     }
 
-    public List<WiseSaying> getAllItems() {
+    public Page getAllItems() {
         return wiseSayingRepository.findAll();
     }
 
@@ -45,7 +45,7 @@ public class WiseSayingService {
 
     public List<WiseSaying> search(String kType, String kW) {
 
-        return wiseSayingRepository.findAll().stream()
+        return wiseSayingRepository.findAll().getWiseSayings().stream()
                 .filter( w-> {
                     if(kType.equals("content")) {
                         return w.getContent().contains(kW);

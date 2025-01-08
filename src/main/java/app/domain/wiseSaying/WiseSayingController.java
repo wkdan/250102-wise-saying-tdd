@@ -35,13 +35,15 @@ public class WiseSayingController {
 
         List<WiseSaying> wiseSayingList;
 
+        Page pageContent = wiseSayingService.getAllItems();
+
         if(command.isSearchCommand()) {
 
             String kType = command.getParam("keywordType");
             String kW = command.getParam("keyword");
             wiseSayingList = wiseSayingService.search(kType, kW);
         } else {
-            wiseSayingList = wiseSayingService.getAllItems();
+            wiseSayingList = pageContent.getWiseSayings();
         }
 
 
@@ -55,15 +57,13 @@ public class WiseSayingController {
             System.out.printf("%d / %s / %s\n", w.getId(), w.getAuthor(), w.getContent());
         });
 
-        printPage(page);
+        printPage(page,pageContent.getTotalPages());
     }
 
-    private void printPage(int page) {
+    private void printPage(int page, int totalPages) {
 
         // 2대신 전체 페이지 개수로 세팅
-        int totalItems = wiseSayingService.count();
-        int itemsPerPage = 5;
-        int totalPages = (int) Math.ceil(((double) totalItems / itemsPerPage));
+
 
         for (int i = 1; i <= totalPages; i++) {
             if (i == page) {
