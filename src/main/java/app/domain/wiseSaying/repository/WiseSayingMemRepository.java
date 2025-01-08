@@ -46,4 +46,9 @@ public class WiseSayingMemRepository implements WiseSayingRepository {
 
         return opWiseSaying;
     }
+
+    @Override
+    public void build() {
+
+    }
 }
