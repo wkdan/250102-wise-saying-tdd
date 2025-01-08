@@ -1,6 +1,5 @@
 package app.global;
 
-import app.domain.wiseSaying.global.Command;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

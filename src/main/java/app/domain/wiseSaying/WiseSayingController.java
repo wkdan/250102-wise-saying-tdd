@@ -1,6 +1,6 @@
 package app.domain.wiseSaying;
 
-import app.domain.wiseSaying.global.Command;
+import app.global.Command;
 
 import java.util.List;
 import java.util.Optional;

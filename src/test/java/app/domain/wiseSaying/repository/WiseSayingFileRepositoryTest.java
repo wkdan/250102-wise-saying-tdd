@@ -1,6 +1,7 @@
 package app.domain.wiseSaying.repository;
 
 import app.domain.wiseSaying.WiseSaying;
+import app.global.AppConfig;
 import app.standard.Util;
 import org.junit.jupiter.api.*;
 
@@ -12,18 +13,23 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 public class WiseSayingFileRepositoryTest {
 
     WiseSayingFileRepository wiseSayingRepository = new WiseSayingFileRepository();
 
+    @BeforeAll
+    static void beforeAll() {
+        AppConfig.setTestMode();
+    }
 
     @BeforeEach
     void beforeEach() {
-        Util.File.deleteForce("db/test");
+        Util.File.deleteForce(AppConfig.getDbpath());
     }
     @AfterEach
     void afterEach(){
-        Util.File.deleteForce("db/test");
+        Util.File.deleteForce(AppConfig.getDbpath());
     }
 
 
@@ -33,7 +39,7 @@ public class WiseSayingFileRepositoryTest {
         WiseSaying wiseSaying = new WiseSaying(1,"aaa","bbb");
         wiseSayingRepository.save(wiseSaying);
 
-        String filePath = "db/test/wiseSaying/1.json";
+        String filePath = WiseSayingFileRepository.getFilePath(wiseSaying.getId());
 
         boolean rst = Files.exists(Path.of(filePath));
         assertThat(rst).isTrue();
@@ -51,7 +57,7 @@ public class WiseSayingFileRepositoryTest {
         WiseSaying wiseSaying = new WiseSaying(1,"aaa", "bbb");
 
         wiseSayingRepository.save(wiseSaying);
-        String filePath = "db/test/wiseSaying/1.json";
+        String filePath = WiseSayingFileRepository.getFilePath(wiseSaying.getId());
 
         boolean delRst = wiseSayingRepository.deleteById(1);
 
@@ -67,7 +73,8 @@ public class WiseSayingFileRepositoryTest {
 
         wiseSayingRepository.save(wiseSaying);
 
-        assertThat(Files.exists(Path.of("db/test/wiseSaying/1.json"))).isTrue();
+        String filePath = WiseSayingFileRepository.getFilePath(wiseSaying.getId());
+        assertThat(Files.exists(Path.of(filePath))).isTrue();
 
         Optional<WiseSaying> opWiseSaying = wiseSayingRepository.findById(1);
         WiseSaying foundWiseSaying = opWiseSaying.orElse(null);

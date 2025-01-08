@@ -1,4 +1,4 @@
-package app.domain.wiseSaying.global;
+package app.global;
 
 import java.util.HashMap;
 import java.util.Map;
