@@ -27,11 +27,22 @@ public class WiseSayingController {
         System.out.println("%d번 명언이 등록되었습니다.".formatted(wiseSaying.getId()));
     }
 
-    public void actionPrint() {
+    public void actionPrint(Command command) {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
 
-        List<WiseSaying> wiseSayingList = wiseSayingService.getAllItems();
+        List<WiseSaying> wiseSayingList;
+
+        if(command.isSearchCommand()) {
+
+            String kType = command.getParam("keywordType");
+            String kW = command.getParam("keyword");
+            wiseSayingList = wiseSayingService.search(kType, kW);
+        } else {
+            wiseSayingList = wiseSayingService.getAllItems();
+        }
+
+
 
         if (wiseSayingList.isEmpty()) {
             System.out.println("등록된 명언이 없습니다.");

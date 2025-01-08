@@ -16,17 +16,17 @@ public class Command {
         String[] cmdBits = cmd.split("\\?");
         actionName = cmdBits[0];
 
-        if(cmdBits.length < 2) {
+        if (cmdBits.length < 2) {
             return;
         }
 
         String queryString = cmdBits[1];
         String[] params = queryString.split("&");
 
-        for(String param : params) {
+        for (String param : params) {
             String[] paramBits = param.split("=", 2);
 
-            if(paramBits.length < 2) {
+            if (paramBits.length < 2) {
                 continue;
             }
 
@@ -49,9 +49,12 @@ public class Command {
         try {
             String param = paramMap.get(key);
             return Integer.parseInt(param);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return 0;
         }
     }
-    // 쪼개기 작업
+
+    public boolean isSearchCommand() {
+        return (getParam("keywordType") != null || getParam("keyword") != null);
+    }
 }
