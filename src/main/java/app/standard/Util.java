@@ -195,5 +195,8 @@ public class Util {
 
             return resultMap;
         }
+
+        public static String listToJson(List<Map<String, Object>> mapList) {
+        }
     }
 }
