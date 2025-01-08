@@ -46,7 +46,7 @@ public class CommandTest {
     @DisplayName("입력값 - 삭제?id=1 일 때, 파라미터를 요청하면 1이 나와야 한다.")
     void t5() {
         Command cmd = new Command("삭제?id=1");
-        int id = cmd.getParamAsInt("id");
+        int id = cmd.getParamAsInt("id", -1);
 
 
         assertThat(id).isEqualTo(1);
