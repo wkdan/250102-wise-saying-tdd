@@ -1,13 +1,22 @@
 package app.domain.wiseSaying;
 
 import app.standard.TestBot;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import app.standard.Util;
+import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WiseSayingControllerTest {
 
+    @BeforeEach
+    void beforeEach() {
+        Util.File.deleteForce("db/test");
+    }
+
+    @AfterEach
+    void afterEach() {
+        Util.File.deleteForce("db/test");
+    }
 
     @Test
     void t1() {

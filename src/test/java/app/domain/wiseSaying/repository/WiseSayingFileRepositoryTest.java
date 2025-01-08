@@ -1,12 +1,8 @@
 package app.domain.wiseSaying.repository;
 
 import app.domain.wiseSaying.WiseSaying;
-import app.domain.wiseSaying.global.repository.WiseSayingFileRepository;
-import app.domain.wiseSaying.global.repository.WiseSayingRepository;
 import app.standard.Util;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,8 +16,13 @@ public class WiseSayingFileRepositoryTest {
 
     WiseSayingRepository wiseSayingRepository = new WiseSayingFileRepository();
 
-    @AfterAll
-    static void afterAll(){
+
+    @BeforeEach
+    void beforeEach() {
+        Util.File.deleteForce("db/test");
+    }
+    @AfterEach
+    void afterEach(){
         Util.File.deleteForce("db/test");
     }
 
@@ -66,7 +67,6 @@ public class WiseSayingFileRepositoryTest {
 
         wiseSayingRepository.save(wiseSaying);
 
-        wiseSayingRepository.deleteById(1);
         assertThat(Files.exists(Path.of("db/test/wiseSaying/1.json"))).isTrue();
 
         Optional<WiseSaying> opWiseSaying = wiseSayingRepository.findById(1);
@@ -92,5 +92,17 @@ public class WiseSayingFileRepositoryTest {
         assertThat(wiseSayings).hasSize(3);
         assertThat(wiseSayings).contains(wiseSaying1, wiseSaying2, wiseSaying3);
 
+    }
+
+    @Test
+    @DisplayName("lastId 가져오기")
+    void t5() {
+        WiseSaying wiseSaying = new WiseSaying("aaa1", "bbb1");
+
+        wiseSayingRepository.save(wiseSaying);
+
+        int lastId = wiseSayingRepository.getLastId();
+
+        assertThat(lastId).isEqualTo(wiseSaying.getId());
     }
 }

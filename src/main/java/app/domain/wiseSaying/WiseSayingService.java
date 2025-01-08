@@ -1,7 +1,7 @@
 package app.domain.wiseSaying;
 
-import app.domain.wiseSaying.global.repository.WiseSayingFileRepository;
-import app.domain.wiseSaying.global.repository.WiseSayingRepository;
+import app.domain.wiseSaying.repository.WiseSayingFileRepository;
+import app.domain.wiseSaying.repository.WiseSayingRepository;
 
 import java.util.List;
 import java.util.Optional;

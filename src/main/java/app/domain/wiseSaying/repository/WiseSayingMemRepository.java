@@ -1,4 +1,4 @@
-package app.domain.wiseSaying.global.repository;
+package app.domain.wiseSaying.repository;
 
 import app.domain.wiseSaying.WiseSaying;
 
