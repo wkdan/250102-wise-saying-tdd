@@ -114,4 +114,35 @@ public class WiseSayingFileRepositoryTest {
 
         assertThat(lastId).isEqualTo(wiseSaying2.getId());
     }
+
+    @Test
+    @DisplayName("build 하면 모든 명언을 모아 하나의 파일로 저장")
+    void t6() {
+        WiseSaying wiseSaying1 = new WiseSaying("aaa1", "bbb1");
+        wiseSayingRepository.save(wiseSaying1);
+
+        WiseSaying wiseSaying2 = new WiseSaying("aaa1", "bbb1");
+        wiseSayingRepository.save(wiseSaying2);
+
+        wiseSayingRepository.build();
+
+        String  jsonStr = Util.File.readAsString(WiseSayingRepository.getBuildPath());
+
+        assertThat(jsonStr)
+                .isEqualTo("""
+                        [
+                            {
+                                "id" : 1,
+                                "content" : "aaa",
+                                "author" : "bbb"
+                            },
+                            {
+                                "id" : 2,
+                                "content" : "ccc",
+                                "author" : "ddd"
+                            }
+                        ]
+                        """);
+
+    }
 }
