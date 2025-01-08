@@ -33,6 +33,9 @@ public class Util {
 
             return "";
         }
+        public static void write(String file, int content) {
+            write(file, String.valueOf(content));
+        }
 
         public static void write(String file, String content) {
 
@@ -122,6 +125,10 @@ public class Util {
             }
 
             return List.of();
+        }
+
+        public static boolean exists(String filePath) {
+            return Files.exists(Paths.get(filePath));
         }
     }
 

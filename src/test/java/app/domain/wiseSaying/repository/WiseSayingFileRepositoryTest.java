@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WiseSayingFileRepositoryTest {
 
-    WiseSayingRepository wiseSayingRepository = new WiseSayingFileRepository();
+    WiseSayingFileRepository wiseSayingRepository = new WiseSayingFileRepository();
 
 
     @BeforeEach
@@ -80,8 +80,8 @@ public class WiseSayingFileRepositoryTest {
     @DisplayName("모든 명언 가져오기")
     void t4() {
         WiseSaying wiseSaying1 = new WiseSaying(1,"aaa1","bbb1");
-        WiseSaying wiseSaying2 = new WiseSaying(1,"aaa2","bbb2");
-        WiseSaying wiseSaying3 = new WiseSaying(1,"aaa3","bbb3");
+        WiseSaying wiseSaying2 = new WiseSaying(2,"aaa2","bbb2");
+        WiseSaying wiseSaying3 = new WiseSaying(3,"aaa3","bbb3");
 
         wiseSayingRepository.save(wiseSaying1);
         wiseSayingRepository.save(wiseSaying2);
@@ -97,12 +97,14 @@ public class WiseSayingFileRepositoryTest {
     @Test
     @DisplayName("lastId 가져오기")
     void t5() {
-        WiseSaying wiseSaying = new WiseSaying("aaa1", "bbb1");
+        WiseSaying wiseSaying1 = new WiseSaying("aaa1", "bbb1");
+        wiseSayingRepository.save(wiseSaying1);
 
-        wiseSayingRepository.save(wiseSaying);
+        WiseSaying wiseSaying2 = new WiseSaying("aaa1", "bbb1");
+        wiseSayingRepository.save(wiseSaying2);
 
         int lastId = wiseSayingRepository.getLastId();
 
-        assertThat(lastId).isEqualTo(wiseSaying.getId());
+        assertThat(lastId).isEqualTo(wiseSaying2.getId());
     }
 }
