@@ -134,6 +134,23 @@ public class Util {
 
     public static class Json {
 
+        public static String listToJson(List<Map<String, Object>> mapList) {
+            StringBuilder jsonBuilder = new StringBuilder();
+
+            jsonBuilder.append("[\n");
+
+            String str = mapList.stream()//map들이 들어있음
+                    .map(Util.Json::mapToJson)
+                    .map(s ->"    " + s)
+                    .map(s -> s.replaceAll("\n", "\n    "))
+                    .collect(Collectors.joining(",\n"));
+
+            jsonBuilder.append(str);
+            jsonBuilder.append("\n]");
+
+            return jsonBuilder.toString();
+        }
+
         public static String mapToJson(Map<String, Object> map) {
 
             StringBuilder jsonBuilder = new StringBuilder();
@@ -196,7 +213,6 @@ public class Util {
             return resultMap;
         }
 
-        public static String listToJson(List<Map<String, Object>> mapList) {
-        }
+
     }
 }
