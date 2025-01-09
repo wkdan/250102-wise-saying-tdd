@@ -3,7 +3,6 @@ package app.domain.wiseSaying;
 import app.domain.wiseSaying.repository.RepositoryProvider;
 import app.domain.wiseSaying.repository.WiseSayingRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public class WiseSayingService {
@@ -43,18 +42,8 @@ public class WiseSayingService {
         wiseSayingRepository.build();
     }
 
-    public List<WiseSaying> search(String ktype, String kw, int itemsPerPage, int page) {
-
-        return wiseSayingRepository.findAll(itemsPerPage, page).getWiseSayings().stream()
-                .filter(w -> {
-                    if (ktype.equals("content")) {
-                        return w.getContent().contains(kw);
-                    } else {
-                        return w.getAuthor().contains(kw);
-                    }
-                })
-                .toList();
-
+    public Page search(String ktype, String kw, int itemsPerPage, int page) {
+        return wiseSayingRepository.findByKeyword(ktype, kw, itemsPerPage, page);
     }
 
     public void makeSampleData(int cnt) {
