@@ -8,13 +8,14 @@ import java.util.Scanner;
 
 public class WiseSayingController {
 
-    private  final Scanner sc;
-    private WiseSayingService wiseSayingService;
-
+    private final Scanner sc;
+    private final WiseSayingService wiseSayingService;
+    private int itemsPerPage;
 
     public WiseSayingController(Scanner sc) {
         this.sc = sc;
         wiseSayingService = new WiseSayingService();
+        itemsPerPage = 5;
     }
 
     public void actionWrite() {
@@ -35,20 +36,19 @@ public class WiseSayingController {
 
         List<WiseSaying> wiseSayingList;
 
-        Page pageContent = wiseSayingService.getAllItems();
+        Page pageContent = wiseSayingService.getAllItems(itemsPerPage);
 
         if(command.isSearchCommand()) {
 
-            String kType = command.getParam("keywordType");
-            String kW = command.getParam("keyword");
-            wiseSayingList = wiseSayingService.search(kType, kW);
+            String ktype = command.getParam("keywordType");
+            String kw = command.getParam("keyword");
+
+            wiseSayingList = wiseSayingService.search(ktype, kw, itemsPerPage);
         } else {
             wiseSayingList = pageContent.getWiseSayings();
         }
 
-
-
-        if (wiseSayingList.isEmpty()) {
+        if(wiseSayingList.isEmpty()) {
             System.out.println("등록된 명언이 없습니다.");
             return;
         }
@@ -57,23 +57,20 @@ public class WiseSayingController {
             System.out.printf("%d / %s / %s\n", w.getId(), w.getAuthor(), w.getContent());
         });
 
-        printPage(page,pageContent.getTotalPages());
+        printPage(page, pageContent.getTotalPages());
     }
 
     private void printPage(int page, int totalPages) {
 
-        // 2대신 전체 페이지 개수로 세팅
-
-
-        for (int i = 1; i <= totalPages; i++) {
-            if (i == page) {
+        for(int i = 1; i <= totalPages; i++) {
+            if(i == page) {
                 System.out.print("[%d]".formatted(i));
             } else {
                 System.out.print("%d".formatted(i));
             }
 
-            if (i==totalPages) {
-                System.out.println("");
+            if(i == totalPages) {
+                System.out.println();
                 break;
             }
             System.out.print(" / ");
@@ -84,13 +81,11 @@ public class WiseSayingController {
     public void actionDelete(Command cmd) {
 
         int id = cmd.getParamAsInt("id", -1);
-
         boolean result = wiseSayingService.delete(id);
 
         if(!result) {
             System.out.println("%d번 명언은 존재하지 않습니다.".formatted(id));
         }
-
     }
 
     public void actionModify(Command cmd) {
@@ -114,7 +109,8 @@ public class WiseSayingController {
 
         wiseSayingService.modify(wiseSaying, newContent, newAuthor);
 
-        System.out.println("%d번 명언이 수정되었습니다".formatted(id));
+        System.out.println("%d번 명언이 수정되었습니다.".formatted(id));
+
     }
 
     public void actionBuild() {
@@ -127,4 +123,3 @@ public class WiseSayingController {
         System.out.println("샘플 데이터가 생성되었습니다.");
     }
 }
-

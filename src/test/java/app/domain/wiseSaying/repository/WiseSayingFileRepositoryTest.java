@@ -14,10 +14,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class WiseSayingFileRepositoryTest {
 
-    WiseSayingFileRepository wiseSayingRepository = new WiseSayingFileRepository();
+    private WiseSayingFileRepository wiseSayingRepository = new WiseSayingFileRepository();
 
     @BeforeAll
     static void beforeAll() {
@@ -28,16 +27,18 @@ public class WiseSayingFileRepositoryTest {
     void beforeEach() {
         Util.File.deleteForce(AppConfig.getDbpath());
     }
+
     @AfterEach
-    void afterEach(){
+    void afterEach() {
         Util.File.deleteForce(AppConfig.getDbpath());
     }
-
 
     @Test
     @DisplayName("명언 저장")
     void t1() {
-        WiseSaying wiseSaying = new WiseSaying(1,"aaa","bbb");
+
+        WiseSaying wiseSaying = new WiseSaying(1, "aaa", "bbb");
+
         wiseSayingRepository.save(wiseSaying);
 
         String filePath = WiseSayingFileRepository.getFilePath(wiseSaying.getId());
@@ -46,16 +47,20 @@ public class WiseSayingFileRepositoryTest {
         assertThat(rst).isTrue();
 
         Map<String, Object> map = Util.Json.readAsMap(filePath);
-        WiseSaying restoreWiseSaying = WiseSaying.fromMap(map);
+        WiseSaying restoredWiseSaying = WiseSaying.fromMap(map);
 
-        assertThat(wiseSaying).isEqualTo(restoreWiseSaying);
+        System.out.println(wiseSaying);
+        System.out.println(restoredWiseSaying);
+
+        assertThat(wiseSaying).isEqualTo(restoredWiseSaying);
+
     }
 
     @Test
     @DisplayName("명언 삭제")
     void t2() {
 
-        WiseSaying wiseSaying = new WiseSaying(1,"aaa", "bbb");
+        WiseSaying wiseSaying = new WiseSaying(1, "aaa", "bbb");
 
         wiseSayingRepository.save(wiseSaying);
         String filePath = WiseSayingFileRepository.getFilePath(wiseSaying.getId());
@@ -70,8 +75,8 @@ public class WiseSayingFileRepositoryTest {
     @Test
     @DisplayName("아이디로 해당 명언 가져오기")
     void t3() {
-        WiseSaying wiseSaying = new WiseSaying(1,"aaa","bbb");
 
+        WiseSaying wiseSaying = new WiseSaying(1, "aaa", "bbb");
         wiseSayingRepository.save(wiseSaying);
 
         String filePath = WiseSayingFileRepository.getFilePath(wiseSaying.getId());
@@ -82,20 +87,22 @@ public class WiseSayingFileRepositoryTest {
 
         assertThat(foundWiseSaying).isNotNull();
         assertThat(foundWiseSaying).isEqualTo(wiseSaying);
+
     }
 
     @Test
     @DisplayName("모든 명언 가져오기")
     void t4() {
-        WiseSaying wiseSaying1 = new WiseSaying(1,"aaa1","bbb1");
-        WiseSaying wiseSaying2 = new WiseSaying(2,"aaa2","bbb2");
-        WiseSaying wiseSaying3 = new WiseSaying(3,"aaa3","bbb3");
+
+        WiseSaying wiseSaying1 = new WiseSaying(1, "aaa1", "bbb1");
+        WiseSaying wiseSaying2 = new WiseSaying(2, "aaa2", "bbb2");
+        WiseSaying wiseSaying3 = new WiseSaying(3, "aaa3", "bbb3");
 
         wiseSayingRepository.save(wiseSaying1);
         wiseSayingRepository.save(wiseSaying2);
         wiseSayingRepository.save(wiseSaying3);
 
-        List<WiseSaying> wiseSayings = wiseSayingRepository.findAll().getWiseSayings();
+        List<WiseSaying> wiseSayings = wiseSayingRepository.findAll();
 
         assertThat(wiseSayings).hasSize(3);
         assertThat(wiseSayings).contains(wiseSaying1, wiseSaying2, wiseSaying3);
@@ -105,20 +112,24 @@ public class WiseSayingFileRepositoryTest {
     @Test
     @DisplayName("lastId 가져오기")
     void t5() {
+
         WiseSaying wiseSaying1 = new WiseSaying("aaa1", "bbb1");
         wiseSayingRepository.save(wiseSaying1);
 
         WiseSaying wiseSaying2 = new WiseSaying("aaa1", "bbb1");
         wiseSayingRepository.save(wiseSaying2);
 
+
         int lastId = wiseSayingRepository.getLastId();
 
         assertThat(lastId).isEqualTo(wiseSaying2.getId());
+
     }
 
     @Test
     @DisplayName("build 하면 모든 명언을 모아 하나의 파일로 저장")
     void t6() {
+
         WiseSaying wiseSaying1 = new WiseSaying("aaa", "bbb");
         wiseSayingRepository.save(wiseSaying1);
 
@@ -127,7 +138,7 @@ public class WiseSayingFileRepositoryTest {
 
         wiseSayingRepository.build();
 
-        String  jsonStr = Util.File.readAsString(WiseSayingFileRepository.getBuildPath());
+        String jsonStr = Util.File.readAsString(WiseSayingFileRepository.getBuildPath());
 
         assertThat(jsonStr)
                 .isEqualTo("""
@@ -150,15 +161,15 @@ public class WiseSayingFileRepositoryTest {
     @Test
     @DisplayName("현재 저장된 명언의 개수를 가져오는 count")
     void t7() {
+
         WiseSaying wiseSaying1 = new WiseSaying("aaa", "bbb");
         wiseSayingRepository.save(wiseSaying1);
 
         WiseSaying wiseSaying2 = new WiseSaying("ccc", "ddd");
         wiseSayingRepository.save(wiseSaying2);
 
-        int count = wiseSayingRepository.count();
 
-        String  jsonStr = Util.File.readAsString(WiseSayingFileRepository.getBuildPath());
+        int count = wiseSayingRepository.count();
 
         assertThat(count)
                 .isEqualTo(2);
@@ -168,17 +179,19 @@ public class WiseSayingFileRepositoryTest {
     @Test
     @DisplayName("페이지 정보와 결과 가져오기")
     void t8() {
+
         WiseSaying wiseSaying1 = new WiseSaying("aaa", "bbb");
         wiseSayingRepository.save(wiseSaying1);
 
         WiseSaying wiseSaying2 = new WiseSaying("ccc", "ddd");
         wiseSayingRepository.save(wiseSaying2);
 
-        //[List<WiseSaying> wiseSayings, totalItems, totalPages, page] = wiseSayingRepository.findAll();
+        WiseSaying wiseSaying3 = new WiseSaying("eee", "fff");
+        wiseSayingRepository.save(wiseSaying3);
 
-        // 반환값이 여러개이고 싶다 -> 포장
-
-        Page pageContent = wiseSayingRepository.findAll();
+        // [List<WiseSaying> wiseSayings, totalItems, totalPages, page]= wiseSayingRepository.findAll();
+        int itemsPerPage = 5;
+        Page pageContent = wiseSayingRepository.findAll(itemsPerPage);
 
         List<WiseSaying> wiseSayings = pageContent.getWiseSayings();
         int totalItems = pageContent.getTotalItems();
