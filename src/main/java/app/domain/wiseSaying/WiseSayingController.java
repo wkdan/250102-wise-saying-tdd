@@ -2,7 +2,6 @@ package app.domain.wiseSaying;
 
 import app.global.Command;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -29,8 +28,6 @@ public class WiseSayingController {
     }
 
     public void actionPrint(Command command) {
-        System.out.println("번호 / 작가 / 명언");
-        System.out.println("----------------------");
 
         int page = command.getParamAsInt("page", 1);
         Page<WiseSaying> pageContent;
@@ -41,20 +38,42 @@ public class WiseSayingController {
             String kw = command.getParam("keyword");
 
             pageContent = wiseSayingService.search(ktype, kw, itemsPerPage, page);
+
+
         } else {
             pageContent = wiseSayingService.getAllItems(itemsPerPage, page);
         }
+
+        printWiseSayings(pageContent, command);
+    }
+
+    private void printWiseSayings(Page<WiseSaying> pageContent, Command cmd) {
 
         if(pageContent.getContent().isEmpty()) {
             System.out.println("등록된 명언이 없습니다.");
             return;
         }
 
+        if(cmd.isSearchCommand()) {
+
+            String kwtype = cmd.getParam("keywordType");
+            String kw = cmd.getParam("keyword");
+
+            System.out.println("----------------------");
+            System.out.println("검색타입 : %s".formatted(kwtype));
+            System.out.println("검색어 : %s".formatted(kw));
+            System.out.println("----------------------");
+
+        }
+
+        System.out.println("번호 / 작가 / 명언");
+        System.out.println("----------------------");
+
         pageContent.getContent().forEach(w -> {
             System.out.printf("%d / %s / %s\n", w.getId(), w.getAuthor(), w.getContent());
         });
 
-        printPage(page, pageContent.getTotalPages());
+        printPage(pageContent.getPage(), pageContent.getTotalPages());
     }
 
     private void printPage(int page, int totalPages) {

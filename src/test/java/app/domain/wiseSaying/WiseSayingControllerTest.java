@@ -372,6 +372,6 @@ public class WiseSayingControllerTest {
 
         assertThat(out)
                 .contains("검색타입 : content")
-                .contains("검색어  : 과거");
+                .contains("검색어 : 과거");
     }
 }
