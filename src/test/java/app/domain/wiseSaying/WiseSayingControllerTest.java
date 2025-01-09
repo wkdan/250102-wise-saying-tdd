@@ -17,12 +17,12 @@ public class WiseSayingControllerTest {
 
     @BeforeEach
     void before() {
-        Util.File.deleteForce(AppConfig.getDbpath());
+        Util.File.deleteForce(AppConfig.getDbPath());
     }
 
     @AfterEach
     void after() {
-        Util.File.deleteForce(AppConfig.getDbpath());
+        Util.File.deleteForce(AppConfig.getDbPath());
     }
 
     @Test

@@ -49,7 +49,7 @@ public class AppConfig {
         return dbMode.equals("mem");
     }
 
-    public static String getDbpath() {
+    public static String getDbPath() {
         return "db/" +mode;
     }
 

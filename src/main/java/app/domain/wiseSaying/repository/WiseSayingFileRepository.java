@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class WiseSayingFileRepository implements WiseSayingRepository {
 
-    private static final String DB_PATH = AppConfig.getDbpath() + "/wiseSaying";
+    private static final String DB_PATH = AppConfig.getDbPath() + "/wiseSaying";
     private static final String ID_FILE_PATH = DB_PATH + "/lastId.txt";
     private static final String BUILD_PATH = DB_PATH + "/build/data.json";
 
@@ -49,7 +49,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         return wiseSaying;
     }
 
-    public Page findByKeyword(String ktype, String kw, int itemsPerPage, int page) {
+    public Page<WiseSaying> findByKeyword(String ktype, String kw, int itemsPerPage, int page) {
 
         List<WiseSaying> searchedWiseSayings = findAll().stream()
                 .filter(w -> {
@@ -65,7 +65,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         return pageOf(searchedWiseSayings, itemsPerPage, page);
     }
 
-    public Page findAll(int itemsPerPage, int page) {
+    public Page<WiseSaying> findAll(int itemsPerPage, int page) {
         List<WiseSaying> sortedWiseSayings = findAll().stream()
                 .sorted(Comparator.comparing(WiseSaying::getId).reversed())
                 .toList();
@@ -83,7 +83,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     }
 
-    private Page pageOf(List<WiseSaying> wiseSayings, int itemsPerPage, int page) {
+    private Page<WiseSaying> pageOf(List<WiseSaying> wiseSayings, int itemsPerPage, int page) {
         int totalItems = wiseSayings.size();
 
         List<WiseSaying> pageContent = wiseSayings.stream()
@@ -91,7 +91,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
                 .limit(itemsPerPage)
                 .toList();
 
-        return new Page(pageContent, totalItems, itemsPerPage);
+        return new Page<>(pageContent, totalItems, itemsPerPage);
     }
 
     public boolean deleteById(int id) {
