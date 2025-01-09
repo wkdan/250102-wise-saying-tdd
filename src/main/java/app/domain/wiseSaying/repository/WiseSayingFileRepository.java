@@ -6,6 +6,7 @@ import app.global.AppConfig;
 import app.standard.Util;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -48,16 +49,6 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         return wiseSaying;
     }
 
-    List<WiseSaying> findAll() {
-        return Util.File.getPaths(DB_PATH).stream()
-                .map(Path::toString)
-                .filter(path -> path.endsWith(".json"))
-                .map(Util.Json::readAsMap)
-                .map(WiseSaying::fromMap)
-                .toList();
-
-    }
-
     public Page findByKeyword(String ktype, String kw, int itemsPerPage, int page) {
 
         List<WiseSaying> searchedWiseSayings = findAll().stream()
@@ -68,26 +59,39 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
                         return w.getAuthor().contains(kw);
                     }
                 })
-                .toList();
-        int totalItems = searchedWiseSayings.size();
-
-        List<WiseSaying> searchedResult = searchedWiseSayings.stream()
-                .skip((long) (page - 1) * itemsPerPage)
-                .limit(itemsPerPage)
+                .sorted(Comparator.comparing(WiseSaying::getId).reversed()) // 기본은 오름차순. 내림차순
                 .toList();
 
-        return new Page(searchedResult, totalItems, itemsPerPage);
+        return pageOf(searchedWiseSayings, itemsPerPage, page);
     }
 
     public Page findAll(int itemsPerPage, int page) {
-        List<WiseSaying> wiseSayings = findAll();
+        List<WiseSaying> sortedWiseSayings = findAll().stream()
+                .sorted(Comparator.comparing(WiseSaying::getId).reversed())
+                .toList();
+
+        return pageOf(sortedWiseSayings, itemsPerPage, page);
+    }
+
+    List<WiseSaying> findAll() {
+        return Util.File.getPaths(DB_PATH).stream()
+                .map(Path::toString)
+                .filter(path -> path.endsWith(".json"))
+                .map(Util.Json::readAsMap)
+                .map(WiseSaying::fromMap)
+                .toList();
+
+    }
+
+    private Page pageOf(List<WiseSaying> wiseSayings, int itemsPerPage, int page) {
+        int totalItems = wiseSayings.size();
 
         List<WiseSaying> pageContent = wiseSayings.stream()
                 .skip((long) (page - 1) * itemsPerPage)
                 .limit(itemsPerPage)
                 .toList();
 
-        return new Page(pageContent, wiseSayings.size(), itemsPerPage);
+        return new Page(pageContent, totalItems, itemsPerPage);
     }
 
     public boolean deleteById(int id) {

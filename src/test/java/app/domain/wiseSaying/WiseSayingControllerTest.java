@@ -16,12 +16,12 @@ public class WiseSayingControllerTest {
     }
 
     @BeforeEach
-    void beforeEach() {
+    void before() {
         Util.File.deleteForce(AppConfig.getDbpath());
     }
 
     @AfterEach
-    void afterEach() {
+    void after() {
         Util.File.deleteForce(AppConfig.getDbpath());
     }
 
@@ -33,7 +33,7 @@ public class WiseSayingControllerTest {
 
     @Test
     void t2() {
-//        App.App app = new App.App();
+//        app.App app = new app.App();
 //        app.run();
 
         // aaa가 출력되는가?
@@ -145,7 +145,6 @@ public class WiseSayingControllerTest {
                 .contains("번호 / 작가 / 명언")
                 .contains("----------------------")
                 .containsSubsequence("2 / 작자미상 / 과거에 집착하지 마라.", "1 / 작자미상 / 현재를 사랑하라.");
-
     }
 
     @Test
@@ -162,13 +161,14 @@ public class WiseSayingControllerTest {
                 목록
                 """);
 
+
         assertThat(out)
                 .contains("2 / 작자미상 / 과거에 집착하지 마라.")
                 .doesNotContain("1 / 작자미상 / 현재를 사랑하라.");
     }
 
     @Test
-    @DisplayName("삭제 예외 처리 - 없는 id로 삭제를 시도하면 예외처리 메세지가 나온다")
+    @DisplayName("삭제 예외 처리 - 없는 id로 삭제를 시도하면 예외처리 메시지가 나온다.")
     void t11() {
         String out = TestBot.run("""
                 등록
@@ -180,12 +180,13 @@ public class WiseSayingControllerTest {
                 삭제?id=1
                 삭제?id=1
                 """);
+
         assertThat(out)
                 .contains("1번 명언은 존재하지 않습니다.");
     }
 
     @Test
-    @DisplayName("수정 - id를 이용해서 해당 id의 명언을 수정할 수 있다. 이때 기존의 명언과 작가가 나와야 함.")
+    @DisplayName("수정 - id를 이용해서 해당 id의 명언을 수정할 수 있다. 이때 기존의 명언과 작가가 나와야 함. 입력값 - 수정?id=1")
     void t12() {
         String out = TestBot.run("""
                 등록
@@ -199,6 +200,7 @@ public class WiseSayingControllerTest {
                 새 작가
                 목록
                 """);
+
         assertThat(out)
                 .doesNotContain("1 / 작자미상 / 현재를 사랑하라.")
                 .contains("1 / 새 작가 / 새 명언 내용");
@@ -228,9 +230,10 @@ public class WiseSayingControllerTest {
                 빌드
                 """);
 
-        boolean rst = Util.File.exists(WiseSayingFileRepository.getBuildPath());
 
+        boolean rst = Util.File.exists(WiseSayingFileRepository.getBuildPath());
         assertThat(rst).isTrue();
+
     }
 
     @Test
@@ -247,8 +250,8 @@ public class WiseSayingControllerTest {
                 """);
 
         assertThat(out)
-                .contains("2 / 작자미상 / 과거에 집착하지 마라")
-                .doesNotContain("1 / 작자미상 / 현재를 사랑하라");
+                .contains("2 / 작자미상 / 과거에 집착하지 마라.")
+                .doesNotContain("1 / 작자미상 / 현재를 사랑하라.");
     }
 
     @Test
@@ -262,9 +265,7 @@ public class WiseSayingControllerTest {
                 """);
 
         assertThat(out)
-                .contains("1 / 작가1 / 명언1")
                 .contains("10 / 작가10 / 명언10");
-
     }
 
     @Test
@@ -283,7 +284,7 @@ public class WiseSayingControllerTest {
     }
 
     @Test
-    @DisplayName("페이징 - 페이징 UI 출력, 샘플 개수에 맞는 데이터 출력")
+    @DisplayName("페이징 - 페이징 UI 출력, 샘플 개수에 맞는 페이지 출력")
     void t18() {
 
         TestBot.makeSample(30);
@@ -298,10 +299,21 @@ public class WiseSayingControllerTest {
     }
 
     @Test
-    @DisplayName("페이지 - 실제 페이지에 맞는 데이터 가져오기")
+    @DisplayName("페이징 - 실제 페이제 맞는 데이터 가져오기1")
     void t19() {
-
         TestBot.makeSample(15);
+
+        // 1 / 작가1 / 명언1
+        // 2 / 작가2 / 명언2
+        // 3 / 작가3 / 명언3
+        // ....
+        // 15 / 작가15 / 명언15
+
+        // 1, 10, 11, 12, 13, 14, 15
+
+        // 15, 14, 13, 12, 11  - 1 페이지
+        // 10, 1 - 2 페이지
+
 
         String out = TestBot.run("""
                 목록?keywordType=content&keyword=1
@@ -314,5 +326,34 @@ public class WiseSayingControllerTest {
         assertThat(out)
                 .contains("[1] / 2");
 
+    }
+
+    @Test
+    @DisplayName("페이징 - 실제 페이제 맞는 데이터 가져오기2")
+    void t20() {
+        TestBot.makeSample(15);
+        String out = TestBot.run("""
+                목록?keywordType=content&keyword=1&page=2
+                """);
+
+        assertThat(out)
+                .containsSubsequence("10 / 작가10 / 명언10", "1 / 작가1 / 명언1")
+                .doesNotContain("11 / 작가11 / 명언11");
+
+        assertThat(out)
+                .contains("1 / [2]");
+    }
+
+    @Test
+    @DisplayName("페이징 - 실제 페이제 맞는 데이터 가져오기3")
+    void t21() {
+        TestBot.makeSample(30);
+        String out = TestBot.run("""
+                목록?page=3
+                """);
+
+        assertThat(out)
+                .contains("18 / 작가18 / 명언18")
+                .contains("1 / 2 / [3] / 4 / 5 / 6");
     }
 }

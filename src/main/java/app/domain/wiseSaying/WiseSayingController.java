@@ -2,7 +2,6 @@ package app.domain.wiseSaying;
 
 import app.global.Command;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -50,7 +49,7 @@ public class WiseSayingController {
             return;
         }
 
-        pageContent.getWiseSayings().reversed().forEach(w -> {
+        pageContent.getWiseSayings().forEach(w -> {
             System.out.printf("%d / %s / %s\n", w.getId(), w.getAuthor(), w.getContent());
         });
 
