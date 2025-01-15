@@ -1,5 +1,6 @@
 package app.domain.wiseSaying.repository;
 
+import app.domain.wiseSaying.Page;
 import app.domain.wiseSaying.WiseSaying;
 import app.global.AppConfig;
 import app.standard.Util;
@@ -74,6 +75,21 @@ public class WiseSayingDbRepository {
                 .delete();
 
         return rst > 0;
+    }
+
+    Page<WiseSaying> findAll(int itemsPerPage, int page) {
+
+        long totalItems = count();
+
+        List<WiseSaying> content = simpleDb.genSql()
+                .append("SELECT *")
+                .append("FROM wise_saying")
+                .append("LIMIT ?, ?", (long) (page - 1) * itemsPerPage, itemsPerPage)
+                .selectRows(WiseSaying.class);
+
+
+        return new Page<>(content, (int)totalItems, itemsPerPage, page);
+
     }
 
     public List<WiseSaying> findAll() {
