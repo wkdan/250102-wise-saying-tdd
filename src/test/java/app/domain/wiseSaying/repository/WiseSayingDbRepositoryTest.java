@@ -19,12 +19,12 @@ public class WiseSayingDbRepositoryTest {
 
     @BeforeAll
     static void dropTable() {
-        wiseSayingDbRepository.createWiseSayingTable();
+        wiseSayingDbRepository.createTable();
     }
 
     @BeforeEach
     void truncateArticleTable() {
-        wiseSayingDbRepository.truncateWiseSayingTable();
+        wiseSayingDbRepository.truncateTable();
 
     }
 

@@ -10,7 +10,7 @@ public class RepositoryProvider {
 //        else {
 //            return new WiseSayingMemRepository();
 //        }
-        return new WiseSayingFileRepository();
+        return new WiseSayingDbRepository();
 
     }
 
