@@ -67,7 +67,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     @Override
     public void createTable() {
-        // 테이블 삭제
+        // 기존 테이블 삭제
         Util.File.deleteForce(DB_PATH);
         // 새 테이블 생성
         Util.File.createDir(DB_PATH);
@@ -156,7 +156,6 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         Util.File.write(BUILD_PATH, jsonStr);
     }
 
-    @Override
     public void makeSampleData(int cnt) {
         for (int i = 1; i <= cnt; i++) {
             WiseSaying wiseSaying = new WiseSaying("명언" + i, "작가" + i);
