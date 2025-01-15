@@ -1,5 +1,6 @@
 package app.domain.wiseSaying.repository;
 
+import app.domain.wiseSaying.Page;
 import app.domain.wiseSaying.WiseSaying;
 import app.standard.Util;
 import org.junit.jupiter.api.BeforeAll;
@@ -120,6 +121,36 @@ public class WiseSayingDbRepositoryTest {
 
         assertThat(count)
                 .isEqualTo(2);
+    }
 
+    @Test
+    @DisplayName("페이지 정보와 결과 가져오기")
+    void t6() {
+
+        WiseSaying wiseSaying1 = new WiseSaying("aaa", "bbb");
+        wiseSayingDbRepository.save(wiseSaying1);
+
+        WiseSaying wiseSaying2 = new WiseSaying("ccc", "ddd");
+        wiseSayingDbRepository.save(wiseSaying2);
+
+        WiseSaying wiseSaying3 = new WiseSaying("eee", "fff");
+        wiseSayingDbRepository.save(wiseSaying3);
+
+        int itemsPerPage = 5;
+        int page = 1;
+        Page<WiseSaying> pageContent = wiseSayingDbRepository.findAll(itemsPerPage, page);
+
+        List<WiseSaying> wiseSayings = pageContent.getContent();
+        int totalItems = pageContent.getTotalItems(); //3
+        int totalPages = pageContent.getTotalPages(); //1
+
+        assertThat(wiseSayings)
+                .hasSize(3);
+
+        assertThat(totalItems)
+                .isEqualTo(3);
+
+        assertThat(totalPages)
+                .isEqualTo(1);
     }
 }
