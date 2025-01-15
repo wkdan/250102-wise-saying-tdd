@@ -46,7 +46,7 @@ public class WiseSayingDbRepositoryTest {
     @DisplayName("명언 삭제")
     void t2() {
 
-        WiseSaying wiseSaying = new WiseSaying(1, "aaa", "bbb");
+        WiseSaying wiseSaying = new WiseSaying("aaa", "bbb");
 
         wiseSaying = wiseSayingDbRepository.save(wiseSaying);
 
