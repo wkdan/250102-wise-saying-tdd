@@ -14,4 +14,20 @@ public class WiseSayingDbRepository {
     public WiseSaying save(WiseSaying wiseSaying) {
         return null;
     }
+
+    public void createWiseSayingTable() {
+        simpleDb.run("DROP TABLE IF EXISTS wise_saying");
+
+        simpleDb.run("""
+                CREATE TABLE wise_saying (
+                    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                    content VARCHAR(100) NOT NULL,
+                    author VARCHAR(100) NOT NULL
+                )
+                """);
+    }
+
+    public void truncateWiseSayingTable() {
+        simpleDb.run("TRUNCATE wise_saying");
+    }
 }
