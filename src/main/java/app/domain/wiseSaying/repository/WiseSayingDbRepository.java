@@ -1,7 +1,9 @@
 package app.domain.wiseSaying.repository;
-
 import app.domain.wiseSaying.WiseSaying;
 import app.standard.simpleDb.SimpleDb;
+import app.standard.simpleDb.Sql;
+
+import java.util.Optional;
 
 public class WiseSayingDbRepository {
 
@@ -9,10 +11,6 @@ public class WiseSayingDbRepository {
 
     public WiseSayingDbRepository() {
         this.simpleDb = new SimpleDb("localhost", "root", "123a456s", "wiseSaying__test");
-    }
-
-    public WiseSaying save(WiseSaying wiseSaying) {
-        return null;
     }
 
     public void createWiseSayingTable() {
@@ -28,6 +26,36 @@ public class WiseSayingDbRepository {
     }
 
     public void truncateWiseSayingTable() {
-        simpleDb.run("TRUNCATE wise_saying");
+        simpleDb.run(
+                "TRUNCATE wise_saying"
+        );
+    }
+
+    public WiseSaying save(WiseSaying wiseSaying) {
+        Sql sql = simpleDb.genSql();
+        sql.append("INSERT INTO wise_saying")
+                .append("SET content = ?,", wiseSaying.getContent())
+                .append("author = ?", wiseSaying.getAuthor());
+
+        long generatedId = sql.insert();
+        wiseSaying.setId((int) generatedId);
+
+        return wiseSaying;
+    }
+
+    public Optional<WiseSaying> findById(int id) {
+
+        Sql sql = simpleDb.genSql();
+        sql.append("SELECT *")
+                .append("FROM wise_saying")
+                .append("WHERE id = ?", id);
+
+        WiseSaying wiseSaying = sql.selectRow(WiseSaying.class);
+
+        if(wiseSaying == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(wiseSaying);
     }
 }
